@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6 bg-gray-100 min-h-screen">
+    <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-8">Global Leaderboard</h1>
+
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden max-w-3xl mx-auto">
+        <table class="min-w-full leading-normal">
+            <thead>
+                <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                    <th class="py-3 px-6 text-left">Rank</th>
+                    <th class="py-3 px-6 text-left">Username</th>
+                    <th class="py-3 px-6 text-left">Score</th>
+                    <th class="py-3 px-6 text-left">Problems Solved</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700 text-sm">
+                {% for user in users %}
+                <tr class="border-b border-gray-200 hover:bg-gray-100 {% if current_user.id == user.id %}bg-blue-100 font-semibold{% endif %}">
+                    <td class="py-3 px-6 text-left whitespace-nowrap">{{ loop.index }}</td>
+                    <td class="py-3 px-6 text-left">
+                        <div class="flex items-center">
+                            <div class="mr-3">
+                                <img class="w-8 h-8 rounded-full object-cover" src="https://placehold.co/40x40/FFD700/000000?text={{ user.username[0]|upper }}" alt="Avatar">
+                            </div>
+                            <span>{{ user.username }}</span>
+                        </div>
+                    </td>
+                    <td class="py-3 px-6 text-left">{{ user.score }}</td>
+                    <td class="py-3 px-6 text-left">{{ user.solved_problems_count }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="py-4 px-6 text-center text-gray-500">No users on the leaderboard yet. Solve some problems!</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

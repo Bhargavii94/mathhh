@@ -1,0 +1,597 @@
+{% extends "base.html" %}
+
+{% block title %}Matrix Calculator - Numerify{% endblock %}
+
+{% block content %}
+<style>
+    .matrix-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    
+    .matrix-input-wrapper {
+        position: relative;
+        overflow: hidden;
+        border-radius: 16px;
+    }
+    
+    .matrix-input-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+        background-size: 400% 400%;
+        animation: gradientShift 4s ease infinite;
+        border-radius: 16px;
+        padding: 2px;
+        z-index: 0;
+    }
+    
+    .matrix-textarea {
+        position: relative;
+        z-index: 1;
+        background: white;
+        border-radius: 14px;
+        border: none;
+        transition: all 0.3s ease;
+        font-family: 'Courier New', monospace;
+        resize: vertical;
+    }
+    
+    .matrix-textarea:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .operation-select {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: rgb(6, 6, 6);
+        border: none;
+        border-radius: 12px;
+        padding: 16px 24px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+        padding-right: 48px;
+    }
+    
+    .operation-select:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    .calculate-button {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-weight: bold;
+        padding: 16px 32px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .calculate-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .calculate-button:hover::before {
+        left: 100%;
+    }
+    
+    .calculate-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+    }
+    
+    .result-container {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border: 2px dashed #cbd5e1;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .result-container.has-result {
+        background: white;
+        border: 2px solid #10b981;
+        box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+    }
+    
+    .result-container.has-error {
+        background: #fef2f2;
+        border: 2px solid #ef4444;
+        box-shadow: 0 4px 20px rgba(239, 68, 68, 0.2);
+    }
+    
+    .example-matrix {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 12px;
+        padding: 8px 16px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-block;
+        margin: 4px;
+        font-family: 'Courier New', monospace;
+    }
+    
+    .example-matrix:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    .matrix-label {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .floating-symbols {
+        position: absolute;
+        opacity: 0.1;
+        animation: float 8s ease-in-out infinite;
+        color: white;
+        font-size: 2rem;
+    }
+    
+    .floating-symbols:nth-child(2) { animation-delay: -2s; }
+    .floating-symbols:nth-child(3) { animation-delay: -4s; }
+    .floating-symbols:nth-child(4) { animation-delay: -6s; }
+    
+    .math-pattern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
+            radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 2px, transparent 2px);
+        background-size: 60px 60px;
+        animation: patternMove 25s linear infinite;
+    }
+    
+    .loading-animation {
+        width: 60px;
+        height: 60px;
+        border: 4px solid #e2e8f0;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+    
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        33% { transform: translateY(-20px) rotate(10deg); }
+        66% { transform: translateY(10px) rotate(-10deg); }
+    }
+    
+    @keyframes patternMove {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(60px, 60px); }
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 1; }
+    }
+</style>
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Header Section -->
+    <div class="text-center mb-12">
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full mb-6 shadow-lg">
+            <i class="fas fa-calculator text-white text-3xl"></i>
+        </div>
+        <h1 class="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-4">
+            Matrix Operations Calculator
+        </h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Perform complex matrix operations with ease. Add, subtract, and multiply matrices with our intuitive calculator.
+        </p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="matrix-container p-8 mb-8 relative">
+        <div class="math-pattern"></div>
+        
+        <!-- Floating Mathematical Symbols -->
+        <div class="floating-symbols absolute top-8 left-8">
+            <i class="fas fa-plus"></i>
+        </div>
+        <div class="floating-symbols absolute top-16 right-12">
+            <i class="fas fa-minus"></i>
+        </div>
+        <div class="floating-symbols absolute bottom-12 left-16">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="floating-symbols absolute bottom-8 right-8">
+            <i class="fas fa-equals"></i>
+        </div>
+        
+        <div class="glass-card p-8 relative z-10">
+            <!-- Quick Examples Section -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                    <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                    Quick Examples - Click to Try:
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="text-center">
+                        <h4 class="font-semibold text-gray-600 mb-2">2×2 Identity</h4>
+                        <span class="example-matrix" onclick="setMatrixExample('identity2x2', 'a')">
+                            1, 0<br>0, 1
+                        </span>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-semibold text-gray-600 mb-2">2×2 Basic</h4>
+                        <span class="example-matrix" onclick="setMatrixExample('basic2x2', 'a')">
+                            1, 2<br>3, 4
+                        </span>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-semibold text-gray-600 mb-2">3×3 Matrix</h4>
+                        <span class="example-matrix" onclick="setMatrixExample('basic3x3', 'a')">
+                            1, 0, 2<br>0, 1, 3<br>2, 3, 1
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matrix Input Section -->
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
+                <!-- Matrix A -->
+                <div>
+                    <div class="matrix-label">
+                        <i class="fas fa-matrix mr-2 text-2xl"></i>
+                        Matrix A
+                    </div>
+                    <div class="matrix-input-wrapper">
+                        <textarea 
+                            id="matrix-a" 
+                            class="matrix-textarea w-full h-40 p-4 text-lg focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50 focus:outline-none" 
+                            placeholder="Enter matrix values:&#10;&#10;Row 1: 1, 2, 3&#10;Row 2: 4, 5, 6&#10;Row 3: 7, 8, 9&#10;&#10;Use commas between numbers,&#10;new lines between rows"
+                        ></textarea>
+                    </div>
+                    <div class="mt-2 flex gap-2">
+                        <button onclick="setMatrixExample('identity2x2', 'a')" class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200 transition-colors">
+                            2×2 Identity
+                        </button>
+                        <button onclick="setMatrixExample('basic2x2', 'a')" class="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full hover:bg-green-200 transition-colors">
+                            2×2 Basic
+                        </button>
+                        <button onclick="clearMatrix('a')" class="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full hover:bg-red-200 transition-colors">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Matrix B -->
+                <div>
+                    <div class="matrix-label">
+                        <i class="fas fa-matrix mr-2 text-2xl"></i>
+                        Matrix B
+                    </div>
+                    <div class="matrix-input-wrapper">
+                        <textarea 
+                            id="matrix-b" 
+                            class="matrix-textarea w-full h-40 p-4 text-lg focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50 focus:outline-none" 
+                            placeholder="Enter matrix values:&#10;&#10;Row 1: 1, 0, 0&#10;Row 2: 0, 1, 0&#10;Row 3: 0, 0, 1&#10;&#10;Use commas between numbers,&#10;new lines between rows"
+                        ></textarea>
+                    </div>
+                    <div class="mt-2 flex gap-2">
+                        <button onclick="setMatrixExample('identity2x2', 'b')" class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200 transition-colors">
+                            2×2 Identity
+                        </button>
+                        <button onclick="setMatrixExample('basic2x2_alt', 'b')" class="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full hover:bg-green-200 transition-colors">
+                            2×2 Alt
+                        </button>
+                        <button onclick="clearMatrix('b')" class="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full hover:bg-red-200 transition-colors">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operation Selection and Calculate -->
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6 mb-8">
+                <div class="flex items-center gap-4">
+                    <label class="text-lg font-semibold text-gray-700">Operation:</label>
+                    <select id="operation" class="operation-select">
+                        <option value="add">Addition (A + B)</option>
+                        <option value="subtract">Subtraction (A - B)</option>
+                        <option value="multiply">Multiplication (A × B)</option>
+                    </select>
+                </div>
+                
+                <button id="calculate-btn" class="calculate-button relative overflow-hidden">
+                    <i class="fas fa-play mr-2"></i>
+                    Calculate Result
+                </button>
+            </div>
+
+            <!-- Result Section -->
+            <div>
+                <h2 class="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                    <i class="fas fa-equals mr-2"></i>
+                    Result
+                </h2>
+                <div id="result-container" class="result-container min-h-[200px] flex items-center justify-center p-6">
+                    <!-- Placeholder -->
+                    <div id="result-placeholder" class="text-center">
+                        <div class="mb-6">
+                            <i class="fas fa-calculator text-6xl text-gray-400 mb-4"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-gray-600 mb-2">Ready to Calculate!</h3>
+                        <p class="text-gray-500 text-lg">Enter your matrices above and select an operation to see the result.</p>
+                        <div class="mt-4 text-sm text-gray-400">
+                            <p>💡 Tip: Make sure matrices have compatible dimensions for the selected operation</p>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="loading-state" class="hidden text-center">
+                        <div class="loading-animation mb-4"></div>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Calculating...</h3>
+                        <p class="text-gray-500">Processing your matrix operation</p>
+                    </div>
+
+                    <!-- Result Output -->
+                    <div id="result-output" class="hidden text-center w-full">
+                        <div class="mb-4">
+                            <i class="fas fa-check-circle text-4xl text-green-500"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-green-600 mb-4">Calculation Complete!</h3>
+                        <pre id="matrix-result" class="bg-gray-50 p-6 rounded-lg text-lg font-mono text-center border-2 border-green-200 max-w-md mx-auto"></pre>
+                        <button onclick="copyResult()" class="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-copy mr-2"></i>Copy Result
+                        </button>
+                    </div>
+
+                    <!-- Error State -->
+                    <div id="error-state" class="hidden text-center">
+                        <div class="mb-4">
+                            <i class="fas fa-exclamation-triangle text-6xl text-red-400"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-red-600 mb-2">Calculation Error</h3>
+                        <p id="error-message" class="text-red-500 text-lg mb-4"></p>
+                        <button onclick="resetCalculator()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-redo mr-2"></i>Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="glass-card p-8">
+        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <i class="fas fa-info-circle text-blue-500 mr-3"></i>
+            Matrix Operations Guide
+        </h3>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg">
+                <h4 class="font-bold text-blue-800 mb-3 text-lg">
+                    <i class="fas fa-plus mr-2"></i>Addition
+                </h4>
+                <p class="text-blue-700 mb-3">Matrices must have the same dimensions</p>
+                <div class="bg-blue-200 p-3 rounded font-mono text-sm">
+                    [1, 2] + [5, 6] = [6, 8]<br>
+                    [3, 4]   [7, 8]   [10, 12]
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg">
+                <h4 class="font-bold text-green-800 mb-3 text-lg">
+                    <i class="fas fa-minus mr-2"></i>Subtraction
+                </h4>
+                <p class="text-green-700 mb-3">Matrices must have the same dimensions</p>
+                <div class="bg-green-200 p-3 rounded font-mono text-sm">
+                    [5, 6] - [1, 2] = [4, 4]<br>
+                    [7, 8]   [3, 4]   [4, 4]
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg">
+                <h4 class="font-bold text-purple-800 mb-3 text-lg">
+                    <i class="fas fa-times mr-2"></i>Multiplication
+                </h4>
+                <p class="text-purple-700 mb-3">Columns of A must equal rows of B</p>
+                <div class="bg-purple-200 p-3 rounded font-mono text-sm">
+                    [1, 2] × [5, 6] = [19, 22]<br>
+                    [3, 4]   [7, 8]   [43, 50]
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const matrixExamples = {
+    'identity2x2': '1, 0\n0, 1',
+    'basic2x2': '1, 2\n3, 4',
+    'basic2x2_alt': '5, 6\n7, 8',
+    'basic3x3': '1, 0, 2\n0, 1, 3\n2, 3, 1'
+};
+
+function setMatrixExample(example, matrix) {
+    const textarea = document.getElementById(`matrix-${matrix}`);
+    textarea.value = matrixExamples[example];
+    
+    // Add visual feedback
+    textarea.style.background = 'linear-gradient(90deg, #e0f2fe, #ffffff)';
+    setTimeout(() => {
+        textarea.style.background = 'white';
+    }, 1000);
+}
+
+function clearMatrix(matrix) {
+    document.getElementById(`matrix-${matrix}`).value = '';
+}
+
+function resetCalculator() {
+    const container = document.getElementById('result-container');
+    const placeholder = document.getElementById('result-placeholder');
+    const loading = document.getElementById('loading-state');
+    const result = document.getElementById('result-output');
+    const error = document.getElementById('error-state');
+    
+    container.className = 'result-container min-h-[200px] flex items-center justify-center p-6';
+    placeholder.classList.remove('hidden');
+    loading.classList.add('hidden');
+    result.classList.add('hidden');
+    error.classList.add('hidden');
+}
+
+function copyResult() {
+    const resultText = document.getElementById('matrix-result').textContent;
+    navigator.clipboard.writeText(resultText).then(() => {
+        // Show feedback
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check mr-2"></i>Copied!';
+        button.classList.add('bg-green-600');
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.classList.remove('bg-green-600');
+        }, 2000);
+    });
+}
+
+document.getElementById('calculate-btn').addEventListener('click', async function() {
+    const matrixA_text = document.getElementById('matrix-a').value.trim();
+    const matrixB_text = document.getElementById('matrix-b').value.trim();
+    const operation = document.getElementById('operation').value;
+
+    const container = document.getElementById('result-container');
+    const placeholder = document.getElementById('result-placeholder');
+    const loading = document.getElementById('loading-state');
+    const result = document.getElementById('result-output');
+    const error = document.getElementById('error-state');
+    const errorMsg = document.getElementById('error-message');
+    const matrixResult = document.getElementById('matrix-result');
+
+    // Show loading state
+    container.className = 'result-container min-h-[200px] flex items-center justify-center p-6';
+    placeholder.classList.add('hidden');
+    loading.classList.remove('hidden');
+    result.classList.add('hidden');
+    error.classList.add('hidden');
+
+    function parseMatrix(text) {
+        if (!text) return [];
+        return text.split('\n').map(row => row.split(',').map(val => {
+            const num = parseFloat(val.trim());
+            if (isNaN(num)) throw new Error('Invalid number: ' + val);
+            return num;
+        }));
+    }
+
+    try {
+        const matrix_a = parseMatrix(matrixA_text);
+        const matrix_b = parseMatrix(matrixB_text);
+
+        if (matrix_a.length === 0 || matrix_b.length === 0) {
+            throw new Error("Both matrices must contain values.");
+        }
+
+        // Simulate processing time for better UX
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        const response = await fetch("{{ url_for('explore.matrix_calculator') }}", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ matrix_a, matrix_b, operation })
+        });
+
+        const data = await response.json();
+        loading.classList.add('hidden');
+
+        if (response.ok) {
+            // Format the matrix for better display
+            let formattedResult = '';
+            data.result.forEach((row, index) => {
+                formattedResult += `[${row.map(num => 
+                    Number.isInteger(num) ? num.toString() : num.toFixed(2)
+                ).join(', ')}]`;
+                if (index < data.result.length - 1) formattedResult += '\n';
+            });
+            
+            matrixResult.textContent = formattedResult;
+            result.classList.remove('hidden');
+            container.classList.add('has-result');
+        } else {
+            errorMsg.textContent = data.error;
+            error.classList.remove('hidden');
+            container.classList.add('has-error');
+        }
+    } catch (e) {
+        loading.classList.add('hidden');
+        errorMsg.textContent = e.message || 'Invalid input format. Please check your matrices.';
+        error.classList.remove('hidden');
+        container.classList.add('has-error');
+    }
+});
+
+// Auto-scroll to result when calculation completes
+document.getElementById('calculate-btn').addEventListener('click', function() {
+    setTimeout(() => {
+        document.getElementById('result-container').scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+        });
+    }, 100);
+});
+</script>
+{% endblock %}

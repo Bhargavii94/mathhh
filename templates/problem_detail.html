@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Problem: {{ problem.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto mt-8 px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col gap-6">
+
+        {# Problem Description Card #}
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-3xl font-semibold text-blue-700 mb-3">{{ problem.title }}</h2>
+            <p class="text-gray-700 text-lg leading-relaxed">{{ problem.description | safe }}</p>
+        </div>
+
+        {# Flash Messages (Submission Result) #}
+        {# This block should already be in base.html as per your provided base.html structure,
+           but including it here for completeness if you prefer it per-page.
+           If it's in base.html, remove this section from problem_detail.html. #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mb-4">
+                    {% for category, message in messages %}
+                        <div class="py-3 px-5 rounded-lg font-bold text-center
+                            {% if 'success' in category or 'Accepted' in message %}bg-green-100 text-green-800 border border-green-300
+                            {% elif 'danger' in category %}bg-red-100 text-red-800 border border-red-300
+                            {% elif 'info' in category %}bg-blue-100 text-blue-800 border border-blue-300
+                            {% elif 'warning' in category %}bg-yellow-100 text-yellow-800 border border-yellow-300
+                            {% else %}bg-gray-100 text-gray-800 border border-gray-300{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+
+        {# Submit Answer Card #}
+        <div class="bg-white shadow-md rounded-lg">
+            <div class="bg-blue-600 text-white p-4 rounded-t-lg">
+                <h4 class="text-xl font-semibold">Submit Your Answer</h4>
+            </div>
+            <div class="p-6">
+                <form method="POST" class="space-y-4">
+                    <div>
+                        <label for="answer" class="block text-gray-700 text-sm font-medium mb-1">Your Answer:</label>
+                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                               id="answer" name="answer" value="{{ submitted_answer_value }}" placeholder="Enter your numerical answer" required>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition duration-200 shadow-md">Submit Answer</button>
+                </form>
+
+                {# Result Display below submission form #}
+                {% if result %}
+                    <div class="mt-6 p-4 rounded-lg text-center
+                        {% if result == 'Accepted' %}bg-green-50 border border-green-400 text-green-800
+                        {% else %}bg-red-50 border border-red-400 text-red-800{% endif %}">
+                        <h5 class="text-xl font-bold">
+                            Result: <span class="font-bold">{{ result }}</span>
+                        </h5>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Your Latest Submissions Card #}
+        <div class="bg-white shadow-md rounded-lg">
+            <div class="bg-gray-700 text-white p-4 rounded-t-lg">
+                <h4 class="text-xl font-semibold">Your Latest Submissions</h4>
+            </div>
+            <div class="p-6">
+                {% if user_submissions %}
+                    <ul class="divide-y divide-gray-200">
+                        {% for submission in user_submissions %}
+                            <li class="py-3 flex justify-between items-center">
+                                <div>
+                                    <span class="font-medium text-gray-800">Submitted:</span>
+                                    <strong class="text-blue-600">{{ submission.submitted_answer }}</strong>
+                                    <span class="text-sm text-gray-500 ml-2">({{ submission.timestamp.strftime('%Y-%m-%d %H:%M:%S') }})</span>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-sm font-semibold
+                                    {% if submission.result == 'Accepted' %}bg-green-500 text-white
+                                    {% else %}bg-red-500 text-white{% endif %}">
+                                    {{ submission.result }}
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-gray-500 text-center py-4">You haven't submitted any answers for this problem yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

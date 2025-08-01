@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Explore - Numerify{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl font-extrabold text-gray-800 mb-8 text-center font-heading">Explore Numerify</h1>
+
+    <div class="mb-10">
+        <h2 class="text-2xl font-bold text-gray-700 mb-4 font-heading">Interactive Tools</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-chart-line text-3xl mr-4" style="color: #1abc9c;"></i>
+                    <h3 class="text-xl font-bold font-heading">Graph Plotter</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Visualize mathematical functions dynamically. Enter an expression and see its graph instantly.
+                </p>
+                <a href="{{ url_for('explore.graph_plotter') }}" style="background-color: #1abc9c;" class="inline-block text-white font-bold py-2 px-4 rounded-lg hover:opacity-90 transition-colors">
+                    Open Plotter
+                </a>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-th text-3xl mr-4" style="color: #3498db;"></i>
+                    <h3 class="text-xl font-bold font-heading">Matrix Calculator</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Perform addition, subtraction, and multiplication on 2D matrices instantly.
+                </p>
+                <a href="{{ url_for('explore.matrix_calculator') }}" style="background-color: #3498db;" class="inline-block text-white font-bold py-2 px-4 rounded-lg hover:opacity-90 transition-colors">
+                    Open Calculator
+                </a>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-square-root-alt text-3xl mr-4" style="color: #9b59b6;"></i>
+                    <h3 class="text-xl font-bold font-heading">Quadratic Solver</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Quickly find the roots of a quadratic equation of the form ax² + bx + c = 0.
+                </p>
+                <a href="{{ url_for('explore.quadratic_solver') }}" style="background-color: #9b59b6;" class="inline-block text-white font-bold py-2 px-4 rounded-lg hover:opacity-90 transition-colors">
+                    Open Solver
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4 font-heading">Filter Videos:</h3>
+        <div class="space-y-6">
+            <div>
+                <span class="block text-gray-600 text-sm font-medium mb-2">By Topic:</span>
+                <div class="flex flex-wrap gap-2">
+                    <a href="{{ url_for('explore.explore_videos', class_level=selected_class_level) }}"
+                       class="px-4 py-2 rounded-full text-sm {% if not selected_topic or selected_topic == 'All Topics' %}bg-blue-600 text-white shadow-lg{% else %}bg-gray-200 text-gray-700 hover:bg-blue-100{% endif %} transition duration-200">
+                        All Topics
+                    </a>
+                    {% for topic in topics %}
+                        <a href="{{ url_for('explore.explore_videos', topic=topic, class_level=selected_class_level) }}"
+                           class="px-4 py-2 rounded-full text-sm {% if selected_topic == topic %}bg-blue-600 text-white shadow-lg{% else %}bg-gray-200 text-gray-700 hover:bg-blue-100{% endif %} transition duration-200">
+                            {{ topic }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div>
+                <span class="block text-gray-600 text-sm font-medium mb-2">By Class Level:</span>
+                <div class="flex flex-wrap gap-2">
+                    <a href="{{ url_for('explore.explore_videos', topic=selected_topic) }}"
+                       class="px-4 py-2 rounded-full text-sm {% if not selected_class_level or selected_class_level == 'All Classes' %}bg-blue-600 text-white shadow-lg{% else %}bg-gray-200 text-gray-700 hover:bg-blue-100{% endif %} transition duration-200">
+                        All Classes
+                    </a>
+                    {% for level in class_levels %}
+                        <a href="{{ url_for('explore.explore_videos', topic=selected_topic, class_level=level) }}"
+                           class="px-4 py-2 rounded-full text-sm {% if selected_class_level == level %}bg-blue-600 text-white shadow-lg{% else %}bg-gray-200 text-gray-700 hover:bg-blue-100{% endif %} transition duration-200">
+                            {{ level }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% if videos %}
+            {% for video in videos %}
+                <div class="bg-white shadow-md rounded-lg overflow-hidden transition-transform transform hover:scale-105 duration-200">
+                    <div class="relative w-full" style="padding-top: 56.25%;">
+                        <iframe class="absolute top-0 left-0 w-full h-full"
+                                src="https://www.youtube.com/embed/{{ video.youtube_id }}"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">{{ video.title }}</h4>
+                        <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ video.description }}</p>
+                        <div class="flex flex-wrap gap-2 text-xs font-medium">
+                            <span class="px-2 py-1 rounded-full bg-indigo-100 text-indigo-800">{{ video.topic }}</span>
+                            <span class="px-2 py-1 rounded-full bg-green-100 text-green-800">{{ video.class_level }}</span>
+                            <span class="px-2 py-1 rounded-full bg-gray-100 text-gray-600">{{ video.uploaded_at.strftime('%Y-%m-%d') }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-span-full bg-white shadow-md rounded-lg p-6 text-center text-gray-600">
+                No videos found for the selected filters.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,318 @@
+[
+  {
+    "title": "Distance Travelled",
+    "description": "A car travels at 70 km/h for 4 hours. How far does it go?",
+    "topic": "Arithmetic",
+    "answer": "280",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Simple Interest",
+    "description": "Find the simple interest on $2000 at 6% per annum for 2 years.",
+    "topic": "Arithmetic",
+    "answer": "240",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Quadratic Root",
+    "description": "Find the larger root of x² - 7x + 12 = 0.",
+    "topic": "Algebra",
+    "answer": "4",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Area of Triangle",
+    "description": "Find the area of a triangle with base 10 units and height 8 units.",
+    "topic": "Geometry",
+    "answer": "40",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Circle Circumference",
+    "description": "What is the circumference of a circle with radius 7 cm? (π = 22/7)",
+    "topic": "Geometry",
+    "answer": "44",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Derivative Evaluation",
+    "description": "If f(x) = x³, find f'(2).",
+    "topic": "Calculus",
+    "answer": "12",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Integral Evaluation",
+    "description": "Evaluate ∫₀¹ x dx.",
+    "topic": "Calculus",
+    "answer": "0.5",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Matrix Trace",
+    "description": "Find the trace of the matrix [[2, 0], [0, 5]].",
+    "topic": "Linear Algebra",
+    "answer": "7",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Probability of Even",
+    "description": "What is the probability of rolling an even number on a six-sided die?",
+    "topic": "Probability",
+    "answer": "0.5",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Mean of Data",
+    "description": "Find the mean of the numbers 3, 7, 8, and 12.",
+    "topic": "Statistics",
+    "answer": "7.5",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Solve Linear Equation",
+    "description": "Solve for x: 3x - 5 = 10.",
+    "topic": "Algebra",
+    "answer": "5",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Trigonometric Value",
+    "description": "What is cos(60°)?",
+    "topic": "Trigonometry",
+    "answer": "0.5",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Slope of Line",
+    "description": "Find the slope of the line passing through (1,2) and (4,8).",
+    "topic": "Algebra",
+    "answer": "2",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Logarithm",
+    "description": "What is log₁₀(100)?",
+    "topic": "Algebra",
+    "answer": "2",
+    "difficulty_level": 1
+  },
+  {
+    "title": "LCM of Two Numbers",
+    "description": "Find the LCM of 12 and 18.",
+    "topic": "Number Theory",
+    "answer": "36",
+    "difficulty_level": 1
+  },
+  {
+    "title": "HCF of Two Numbers",
+    "description": "Find the HCF of 45 and 75.",
+    "topic": "Number Theory",
+    "answer": "15",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Permutation",
+    "description": "How many ways can you arrange the letters A, B, C?",
+    "topic": "Probability",
+    "answer": "6",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Mean of First 5 Odd Numbers",
+    "description": "Find the mean of the first 5 odd natural numbers.",
+    "topic": "Statistics",
+    "answer": "5",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Right Triangle Hypotenuse",
+    "description": "Find the hypotenuse of a right triangle with legs 6 and 8.",
+    "topic": "Geometry",
+    "answer": "10",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Derivative",
+    "description": "If y = sin(x), find dy/dx at x = π/2.",
+    "topic": "Calculus",
+    "answer": "0",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Algebra - Solve for y",
+    "description": "If 2y + 5 = 15, what is y?",
+    "topic": "Algebra",
+    "answer": "5",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Algebra - Expand Expression",
+    "description": "Expand (x + 2)(x - 3).",
+    "topic": "Algebra",
+    "answer": "x^2 - x - 6",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Algebra - Solve System",
+    "description": "Solve for x: 2x + 3y = 12 and x - y = 2 (find x when y = 2).",
+    "topic": "Algebra",
+    "answer": "3",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Algebra - Factor Polynomial",
+    "description": "Factor completely: x^2 - 9.",
+    "topic": "Algebra",
+    "answer": "(x + 3)(x - 3)",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Calculus - Limit",
+    "description": "Find the limit: limₓ→0 (sin x)/x.",
+    "topic": "Calculus",
+    "answer": "1",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Calculus - Derivative",
+    "description": "If f(x) = e^x, find f'(0).",
+    "topic": "Calculus",
+    "answer": "1",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Geometry - Perimeter",
+    "description": "Find the perimeter of a square with side length 9 units.",
+    "topic": "Geometry",
+    "answer": "36",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Geometry - Volume of Cylinder",
+    "description": "Find the volume of a cylinder with radius 3 units and height 5 units (use π = 3.14).",
+    "topic": "Geometry",
+    "answer": "141.3",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Linear Algebra - Inverse",
+    "description": "Find the inverse of the matrix [[1, 0], [0, 1]].",
+    "topic": "Linear Algebra",
+    "answer": "[[1, 0], [0, 1]]",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Linear Algebra - Eigenvalue",
+    "description": "Find an eigenvalue of the matrix [[2, 0], [0, 3]].",
+    "topic": "Linear Algebra",
+    "answer": "2 or 3",
+    "difficulty_level": 3
+  },
+  {
+    "title": "Linear Algebra - Matrix Addition",
+    "description": "Add the matrices [[1,2],[3,4]] and [[4,3],[2,1]]. What is the (1,1) entry?",
+    "topic": "Linear Algebra",
+    "answer": "5",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Linear Algebra - Dot Product",
+    "description": "Find the dot product of vectors [1, 2] and [3, 4].",
+    "topic": "Linear Algebra",
+    "answer": "11",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Number Theory - Prime Check",
+    "description": "Is 17 a prime number?",
+    "topic": "Number Theory",
+    "answer": "Yes",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Number Theory - Next Prime",
+    "description": "What is the next prime number after 19?",
+    "topic": "Number Theory",
+    "answer": "23",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Number Theory - Divisibility",
+    "description": "Is 105 divisible by 5?",
+    "topic": "Number Theory",
+    "answer": "Yes",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Probability - Coin Toss",
+    "description": "What is the probability of tossing a head with a fair coin?",
+    "topic": "Probability",
+    "answer": "0.5",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Probability - Dice Sum",
+    "description": "What is the probability of rolling a sum of 7 with two dice?",
+    "topic": "Probability",
+    "answer": "1/6",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Probability - Card Draw",
+    "description": "What is the probability of drawing a heart from a standard deck?",
+    "topic": "Probability",
+    "answer": "1/4",
+    "difficulty_level": 2
+  },
+  {
+    "title": "Statistics - Median",
+    "description": "Find the median of the data set: 3, 5, 7, 9, 11.",
+    "topic": "Statistics",
+    "answer": "7",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Statistics - Mode",
+    "description": "What is the mode of the numbers: 2, 4, 4, 5, 6?",
+    "topic": "Statistics",
+    "answer": "4",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Statistics - Range",
+    "description": "Find the range of the numbers: 12, 7, 9, 15, 10.",
+    "topic": "Statistics",
+    "answer": "8",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Trigonometry - tan 45°",
+    "description": "What is tan(45°)?",
+    "topic": "Trigonometry",
+    "answer": "1",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Trigonometry - sin 90°",
+    "description": "What is sin(90°)?",
+    "topic": "Trigonometry",
+    "answer": "1",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Trigonometry - cos 0°",
+    "description": "What is cos(0°)?",
+    "topic": "Trigonometry",
+    "answer": "1",
+    "difficulty_level": 1
+  },
+  {
+    "title": "Trigonometry - Pythagorean Identity",
+    "description": "If sin²x + cos²x = ?, what is the value?",
+    "topic": "Trigonometry",
+    "answer": "1",
+    "difficulty_level": 2
+  }
+
+]

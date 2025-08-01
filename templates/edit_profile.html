@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile - MathCode{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Edit Your Profile</h1>
+
+        <form method="POST" action="{{ url_for('profile.edit_profile') }}" class="space-y-6">
+            <div>
+                <label for="username" class="block text-gray-700 text-sm font-medium mb-2">Username:</label>
+                <input type="text" id="username" name="username" value="{{ user.username }}" disabled
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed text-lg">
+                <p class="text-xs text-gray-500 mt-1">Username cannot be changed.</p>
+            </div>
+            <div>
+                <label for="email" class="block text-gray-700 text-sm font-medium mb-2">Email:</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" disabled
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed text-lg">
+                <p class="text-xs text-gray-500 mt-1">Email cannot be changed.</p>
+            </div>
+            <div>
+                <label for="college" class="block text-gray-700 text-sm font-medium mb-2">College/University:</label>
+                <input type="text" id="college" name="college" value="{{ user.college if user.college != 'N/A' else '' }}"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                       placeholder="e.g., Your University Name">
+            </div>
+            <div>
+                <label for="bio" class="block text-gray-700 text-sm font-medium mb-2">Bio:</label>
+                <textarea id="bio" name="bio" rows="4"
+                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg resize-y"
+                          placeholder="Tell us a little about yourself...">{{ user.bio if user.bio != 'No bio yet.' else '' }}</textarea>
+            </div>
+            <div>
+                <label for="interests" class="block text-gray-700 text-sm font-medium mb-2">Interests (comma-separated):</label> {# Changed label #}
+                <input type="text" id="interests" name="interests" value="{{ user.interests if user.interests != 'Mathematics' else '' }}" {# Changed name and default #}
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                       placeholder="e.g., Algebra, Geometry, Calculus, Statistics"> {# Changed placeholder #}
+            </div>
+
+            <div class="flex justify-end gap-4 mt-8">
+                <a href="{{ url_for('profile.view_profile') }}" class="bg-gray-200 text-gray-800 py-2 px-5 rounded-lg font-semibold hover:bg-gray-300 transition duration-200">
+                    Cancel
+                </a>
+                <button type="submit" class="bg-blue-600 text-white py-2 px-5 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 shadow-md">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
