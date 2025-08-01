@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: math-app
+    env: python
+    buildCommand: ./build.sh
+    startCommand: gunicorn app:app
+    runtime: python
+    plan: free
