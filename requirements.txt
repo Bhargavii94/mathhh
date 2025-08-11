@@ -6,3 +6,4 @@ SQLAlchemy==2.0.29
 numpy
 matplotlib
 gunicorn
+gspread
